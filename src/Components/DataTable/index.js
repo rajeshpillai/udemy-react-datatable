@@ -42,10 +42,53 @@ export default class DataTable extends React.Component {
         return headerView;
     }
 
+    renderNoData = () => {
+        return (
+            <tr>
+                <td colSpan={this.props.headers.length}>
+                    {this.noData}
+                </td>
+            </tr>
+        );
+    }
+
+    renderContent = () => {
+        let {headers, data} = this.state;
+        let contentView = data.map((row, rowIdx) => {
+            let id = row[this.keyField];
+            let tds = headers.map((header, index) => {
+                let content = row[header.accessor];
+                let cell = header.cell;
+                if (cell) {
+                    if (typeof(cell) === "object") {
+                        if (cell.type === "image" && content) {
+                            content = <img style={cell.style} src={content}  />
+                        } 
+                    } else if (typeof(cell) === "function") {
+                        content = cell(content);
+                    }
+                }
+                return (
+                    <td key={index} data-id={id} data-row={rowIdx}>
+                        {content}
+                    </td>
+                );
+            });
+            return (
+                 <tr key={rowIdx}>
+                     {tds}
+                 </tr>
+             );
+        });
+        return contentView;
+    }
+    
     renderTable = () => {
         let title = this.props.title || "DataTable";
         let headerView = this.renderTableHeader();
-        let contentView = "Content goes here";
+        let contentView = this.state.data.length > 0 
+                        ? this.renderContent() 
+                        : this.renderNoData();
 
         return (
             <table className="data-inner-table">
@@ -58,8 +101,7 @@ export default class DataTable extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {!this.state.data.length && this.noData}
-                    {this.state.data && contentView}
+                    {contentView}
                 </tbody>
             </table>
         );
