@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import DataTable from './Components/DataTable';
 
 class App extends Component {
   constructor(props) {
@@ -53,7 +54,18 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-       
+        <DataTable className="data-table"
+            title="USER PROFILES"
+            keyField="id"
+            pagination={{
+              enabled: true,
+              pageLength: 5,
+              type: "long"  // long, short
+            }}
+            width="100%"
+            headers={this.state.headers}
+            data={this.state.DataTable}
+            noData="No records!" />
       </div>
     );
   }

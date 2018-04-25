@@ -1,0 +1,62 @@
+.toolbar {
+    display: inline-block;
+    font-size: 0.7em;
+  }
+  
+  .toolbar a, .toolbar button {
+    margin-left: 1px;
+  }
+  
+  .data-table {
+    padding:10px;
+    box-shadow: 2px 2px 2px 1px rgb(90, 88, 88);
+  }
+  
+  .data-inner-table {
+    width:100%;
+    border-collapse: collapse;
+  }
+  
+  .data-table th {
+    background-color:whitesmoke;
+    padding: 7px;
+    position: relative;
+    border: 1px solid #e5e5e5;
+    text-align: left;
+    font-weight: normal;
+    line-height: 2em;
+  }
+  
+  .data-table td {
+    border: 1px solid #eee;
+    color: #212121;
+    vertical-align: middle;
+    padding: 4px 7px;
+  }
+  
+  .col-resizer {
+    position: absolute;
+    width: 20px;
+    height:30px;
+    cursor: col-resize;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    user-select: none;
+  }
+  
+  .rating {
+    border:none;
+    box-shadow: 2px 2px 2px grey;
+    background-color: lightgray;
+    vertical-align: middle;
+    line-height: 2em;
+  }
+  
+  .data-table-caption {
+    padding: 15px 5px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
