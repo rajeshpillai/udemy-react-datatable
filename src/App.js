@@ -64,7 +64,7 @@ class App extends Component {
             }}
             width="100%"
             headers={this.state.headers}
-            data={this.state.DataTable}
+            data={this.state.data}
             noData="No records!" />
       </div>
     );
