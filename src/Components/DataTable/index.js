@@ -149,25 +149,32 @@ export default class DataTable extends React.Component {
     }
 
     onSearch = (e) => {
-        // Grab the search text
-        let needle = e.target.value.trim().toLowerCase();
-
-        // Empty input
-        if (!needle) {
-            this.setState({
-                data: this._preSearchData
-            });
-        }
-
+        let {headers} = this.state;
         // Grab the index of the target column
         let idx = e.target.dataset.idx;
 
         // Get the target column
         let targetCol = this.state.headers[idx].accessor;
 
+        let data = this._preSearchData;
+
         // Filter the records
         let searchData = this._preSearchData.filter((row) => {
-            return row[targetCol].toString().toLowerCase().indexOf(needle) > -1;
+            let show = true;
+
+            for (let field in row) {
+                let fieldValue = row[field];
+                let inputId = 'inp' + field;
+                let input = this[inputId];
+                if (!fieldValue === '') {
+                    show = true;
+                } else {
+                    show = fieldValue.toString().toLowerCase().indexOf(input.value.toLowerCase()) > -1;
+                    if (!show) break;
+                }
+            }
+            return show;
+            //return row[targetCol].toString().toLowerCase().indexOf(needle) > -1;
         });
 
         // UPdate the state
@@ -186,10 +193,12 @@ export default class DataTable extends React.Component {
             
             // Get the header ref.
             let hdr = this[header.accessor];
+            let inputId = 'inp' + header.accessor;
 
             return (
                 <td key={idx}>
                     <input type="text"
+                       ref={(input)=>this[inputId] = input}
                         style={{
                             width: hdr.clientWidth-17 + "px"
                         }}
