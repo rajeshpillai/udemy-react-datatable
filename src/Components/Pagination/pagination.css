@@ -1,0 +1,33 @@
+
+.pagination {
+    display: inline-block;
+    font-size: 1em;
+    padding: 10px 0px;
+    color: gray;
+  }
+  .current-page {
+    background-color: skyblue;
+    color: black;
+  }
+    
+  .pagination-btn {
+    border: 0;
+    line-height: 1.7em;
+  }
+  .pagination-btn.next, .pagination-btn.prev {
+    color: black;
+  }
+  
+  .page-selector {
+    padding: 5px;
+  }
+  
+  .page-selector > input {
+    width: 3em;
+    text-align: center;
+  }
+    
+  .current-page-input {
+    width: 3em;
+    text-align: center;
+  }
