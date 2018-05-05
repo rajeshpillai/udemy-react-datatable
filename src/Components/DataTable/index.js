@@ -96,6 +96,28 @@ export default class DataTable extends React.Component {
         );
     }
 
+    onUpdate = (e) => {
+        e.preventDefault();
+        let input = e.target.firstChild;
+        let header = this.state.headers[this.state.edit.cell];
+        let rowId = this.state.edit.rowId;
+
+        this.setState({
+            edit: null
+        });
+
+        this.props.onUpdate &&
+            this.props.onUpdate(header.accessor, rowId, input.value);
+    }
+
+    onFormReset = (e) =>{
+        if (e.keyCode === 27) {  // ESC key
+            this.setState({
+                edit: null
+            });
+        }
+    }
+
     renderContent = () => {
         let {headers} = this.state;
         let data = this.pagination ? this.state.pagedData
@@ -103,6 +125,8 @@ export default class DataTable extends React.Component {
 
         let contentView = data.map((row, rowIdx) => {
             let id = row[this.keyField];
+            let edit = this.state.edit;
+
             let tds = headers.map((header, index) => {
                 let content = row[header.accessor];
                 let cell = header.cell;
@@ -115,6 +139,23 @@ export default class DataTable extends React.Component {
                         content = cell(content);
                     }
                 }
+
+                if (this.props.edit) {
+                    if (header.dataType && (header.dataType === "number" ||
+                            header.dataType === "string") &&
+                            header.accessor !== this.keyField) {
+                            if (edit && edit.row === rowIdx && edit.cell === index) {
+                                content = (
+                                    <form onSubmit={this.onUpdate}>
+                                        <input type="text" defaultValue={content}
+                                          onKeyUp={this.onFormReset} />
+                                    </form>
+                                );
+                            }
+
+                        }
+                }
+
                 return (
                     <td key={index} data-id={id} data-row={rowIdx}>
                         {content}
@@ -232,6 +273,18 @@ export default class DataTable extends React.Component {
             </tr>
         );
     }
+
+    onShowEditor = (e) => {
+        let id = e.target.dataset.id;
+        this.setState({
+            edit: {
+                row: parseInt(e.target.dataset.row, 10),
+                rowId: id,
+                cell: e.target.cellIndex
+            }
+        })
+    }
+
     renderTable = () => {
         let title = this.props.title || "DataTable";
         let headerView = this.renderTableHeader();
@@ -249,7 +302,7 @@ export default class DataTable extends React.Component {
                         {headerView}
                     </tr>
                 </thead>
-                <tbody>
+                <tbody onDoubleClick={this.onShowEditor}>
                     {this.renderSearch()}
                     {contentView}
                 </tbody>

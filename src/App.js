@@ -8,16 +8,16 @@ class App extends Component {
 
     let model = {
       headers: [
-        {title:"Id",accessor: "id", index: 0},
+        {title:"Id",accessor: "id", index: 0, dataType: "number"},
         {title:"Profile",accessor:"profile", width: "80px", index:1,cell:{
           type: "image",
           style: {
             "width": "50px",
           }
         }},
-        {title:"Name",accessor: "name", width: "300px", index: 2},
-        {title:"Age",accessor: "age",index: 3},
-        {title:"Qualification",accessor: "qualification",index:4},
+        {title:"Name",accessor: "name", width: "300px", index: 2, dataType:"string"},
+        {title:"Age",accessor: "age",index: 3, dataType: "number"},
+        {title:"Qualification",accessor: "qualification",index:4, dataType: "number"},
         {title:"Rating",accessor: "rating",index:5,width: "200px", cell: row => (
           <div  className="rating">
             <div style={{
@@ -51,12 +51,28 @@ class App extends Component {
     this.state = model;
 
   }
+
+  onUpdateTable = (field, id, value) => {
+    let data = this.state.data.slice();
+    let updateRow = this.state.data.find((d) => {
+      return d["id"] == id;
+    });
+
+    updateRow[field] = value;
+
+    this.setState({
+      edit: null,
+      data: data
+    });
+  }
+
   render() {
     return (
       <div>
         <DataTable className="data-table"
             title="USER PROFILES"
             keyField="id"
+            edit={true}
             pagination={{
               enabled: true,
               pageLength: 5,
@@ -65,7 +81,8 @@ class App extends Component {
             width="100%"
             headers={this.state.headers}
             data={this.state.data}
-            noData="No records!" />
+            noData="No records!" 
+            onUpdate={this.onUpdateTable}/>
       </div>
     );
   }
