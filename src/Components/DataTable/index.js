@@ -17,7 +17,7 @@ export default class DataTable extends React.Component {
             descending: null,
             search: false,
             pageLength: this.props.pagination.pageLength || 5,
-            currentPage: 3,
+            currentPage: 1,
         }
 
         this.keyField = props.keyField || "id"; // TODO: revisit this logic
@@ -136,7 +136,7 @@ export default class DataTable extends React.Component {
                             content = <img style={cell.style} src={content}  />
                         } 
                     } else if (typeof(cell) === "function") {
-                        content = cell(content);
+                        content = cell(row);
                     }
                 }
 

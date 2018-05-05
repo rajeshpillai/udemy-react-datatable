@@ -75,6 +75,7 @@ export default class Pagination extends Component {
                currentPage: nextProps.currentPage 
             }
         }
+        return null;
     }
 
     render() {
