@@ -8,7 +8,7 @@ class App extends Component {
 
     let model = {
       headers: [
-        {title:"Id",accessor: "id", index: 0, dataType: "number"},
+        //{title:"Id",accessor: "id", index: 0, dataType: "number"},
         {title:"Profile",accessor:"profile", width: "80px", index:1,cell:{
           type: "image",
           style: {

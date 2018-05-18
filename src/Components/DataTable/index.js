@@ -214,9 +214,10 @@ export default class DataTable extends React.Component {
         let searchData = this._preSearchData.filter((row) => {
             let show = true;
 
-            for (let field in row) {
-                let fieldValue = row[field];
-                let inputId = 'inp' + field;
+            for(let i = 0; i < headers.length; i++) {
+                let fieldName = headers[i].accessor;
+                let fieldValue = row[fieldName];
+                let inputId = 'inp' + fieldName;
                 let input = this[inputId];
                 if (!fieldValue === '') {
                     show = true;
