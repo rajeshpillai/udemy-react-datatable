@@ -53,8 +53,8 @@ export default class DataTable extends React.Component {
     }
 
     renderTableHeader = () => {
-        let {headers} = this.state;
-        headers.sort((a,b) => {
+        let { headers } = this.state;
+        headers.sort((a, b) => {
             if (a.index > b.index) return 1;
             return -1;
         });
@@ -65,17 +65,17 @@ export default class DataTable extends React.Component {
             let width = header.width;
 
             if (this.state.sortby === index) {
-                title += this.state.descending ? '\u2193': '\u2191';
+                title += this.state.descending ? '\u2193' : '\u2191';
             }
 
             return (
                 <th key={cleanTitle}
-                    ref={(th)=>this[cleanTitle] = th} 
-                    style={{width: width}}
+                    ref={(th) => this[cleanTitle] = th}
+                    style={{ width: width }}
                     data-col={cleanTitle}
-                    onDragStart={(e)=>this.onDragStart(e, index)}
+                    onDragStart={(e) => this.onDragStart(e, index)}
                     onDragOver={this.onDragOver}
-                    onDrop={(e)=>{this.onDrop(e, index)}}>
+                    onDrop={(e) => { this.onDrop(e, index) }}>
                     <span draggable data-col={cleanTitle} className="header-cell">
                         {title}
                     </span>
@@ -110,7 +110,7 @@ export default class DataTable extends React.Component {
             this.props.onUpdate(header.accessor, rowId, input.value);
     }
 
-    onFormReset = (e) =>{
+    onFormReset = (e) => {
         if (e.keyCode === 27) {  // ESC key
             this.setState({
                 edit: null
@@ -119,9 +119,9 @@ export default class DataTable extends React.Component {
     }
 
     renderContent = () => {
-        let {headers} = this.state;
+        let { headers } = this.state;
         let data = this.pagination ? this.state.pagedData
-                    : this.state.data;
+            : this.state.data;
 
         let contentView = data.map((row, rowIdx) => {
             let id = row[this.keyField];
@@ -131,29 +131,29 @@ export default class DataTable extends React.Component {
                 let content = row[header.accessor];
                 let cell = header.cell;
                 if (cell) {
-                    if (typeof(cell) === "object") {
+                    if (typeof (cell) === "object") {
                         if (cell.type === "image" && content) {
-                            content = <img style={cell.style} src={content}  />
-                        } 
-                    } else if (typeof(cell) === "function") {
+                            content = <img style={cell.style} src={content} />
+                        }
+                    } else if (typeof (cell) === "function") {
                         content = cell(row);
                     }
                 }
 
                 if (this.props.edit) {
                     if (header.dataType && (header.dataType === "number" ||
-                            header.dataType === "string") &&
-                            header.accessor !== this.keyField) {
-                            if (edit && edit.row === rowIdx && edit.cell === index) {
-                                content = (
-                                    <form onSubmit={this.onUpdate}>
-                                        <input type="text" defaultValue={content}
-                                          onKeyUp={this.onFormReset} />
-                                    </form>
-                                );
-                            }
-
+                        header.dataType === "string") &&
+                        header.accessor !== this.keyField) {
+                        if (edit && edit.row === rowIdx && edit.cell === index) {
+                            content = (
+                                <form onSubmit={this.onUpdate}>
+                                    <input type="text" defaultValue={content}
+                                        onKeyUp={this.onFormReset} />
+                                </form>
+                            );
                         }
+
+                    }
                 }
 
                 return (
@@ -163,22 +163,22 @@ export default class DataTable extends React.Component {
                 );
             });
             return (
-                 <tr key={rowIdx}>
-                     {tds}
-                 </tr>
-             );
+                <tr key={rowIdx}>
+                    {tds}
+                </tr>
+            );
         });
         return contentView;
     }
-    
+
     onSort = (e) => {
         let data = this.state.data.slice(); // Give new array
         let colIndex = ReactDOM.findDOMNode(e.target).parentNode.cellIndex;
         let colTitle = e.target.dataset.col;
-        
+
         let descending = !this.state.descending;
 
-        data.sort((a,b) => {
+        data.sort((a, b) => {
             let sortVal = 0;
             if (a[colTitle] < b[colTitle]) {
                 sortVal = -1;
@@ -195,13 +195,13 @@ export default class DataTable extends React.Component {
             data,
             sortby: colIndex,
             descending
-        }, () =>{
+        }, () => {
             this.onGotoPage(this.state.currentPage);
         });
     }
 
     onSearch = (e) => {
-        let {headers} = this.state;
+        let { headers } = this.state;
         // Grab the index of the target column
         let idx = e.target.dataset.idx;
 
@@ -214,7 +214,7 @@ export default class DataTable extends React.Component {
         let searchData = this._preSearchData.filter((row) => {
             let show = true;
 
-            for(let i = 0; i < headers.length; i++) {
+            for (let i = 0; i < headers.length; i++) {
                 let fieldName = headers[i].accessor;
                 let fieldValue = row[fieldName];
                 let inputId = 'inp' + fieldName;
@@ -235,7 +235,7 @@ export default class DataTable extends React.Component {
             data: searchData,
             pagedData: searchData,
             totalRecords: searchData.length
-        }, ()=>{
+        }, () => {
             if (this.pagination.enabled) {
                 this.onGotoPage(1);
             }
@@ -243,13 +243,13 @@ export default class DataTable extends React.Component {
     }
 
     renderSearch = () => {
-        let {search, headers} = this.state;
+        let { search, headers } = this.state;
         if (!search) {
             return null;
         }
 
         let searchInputs = headers.map((header, idx) => {
-            
+
             // Get the header ref.
             let hdr = this[header.accessor];
             let inputId = 'inp' + header.accessor;
@@ -257,12 +257,12 @@ export default class DataTable extends React.Component {
             return (
                 <td key={idx}>
                     <input type="text"
-                       ref={(input)=>this[inputId] = input}
+                        ref={(input) => this[inputId] = input}
                         style={{
-                            width: hdr.clientWidth-17 + "px"
+                            width: hdr.clientWidth - 17 + "px"
                         }}
-                        data-idx = {idx}
-                      />
+                        data-idx={idx}
+                    />
                 </td>
             );
 
@@ -289,9 +289,9 @@ export default class DataTable extends React.Component {
     renderTable = () => {
         let title = this.props.title || "DataTable";
         let headerView = this.renderTableHeader();
-        let contentView = this.state.data.length > 0 
-                        ? this.renderContent() 
-                        : this.renderNoData();
+        let contentView = this.state.data.length > 0
+            ? this.renderContent()
+            : this.renderNoData();
 
         return (
             <table className="data-inner-table">
@@ -350,7 +350,7 @@ export default class DataTable extends React.Component {
     onPageLengthChange = (pageLength) => {
         this.setState({
             pageLength: parseInt(pageLength, 10)
-        },()=> {
+        }, () => {
             this.onGotoPage(this.state.currentPage);
         });
     }
@@ -369,19 +369,35 @@ export default class DataTable extends React.Component {
         }
     }
 
+    //todo:
+    static getDerivedStateFromProps(nextProps, prevState) {
+        if (nextProps.data.length != prevState.data.length) {
+            return {
+                headers: nextProps.headers,
+                data: nextProps.data,
+                sortby: prevState.sortby,
+                descending: prevState.descending,
+                search: prevState.search,
+                currentPage: 1,
+                pagedData: nextProps.data,
+            }
+        }
+        return null;
+    }
+
     render() {
         return (
             <div className={this.props.className}>
                 {this.pagination.enabled &&
-                
-                <Pagination
-                    type={this.props.pagination.type}
-                    totalRecords = {this.state.data.length}
-                    pageLength = {this.state.pageLength}
-                    onPageLengthChange={this.onPageLengthChange}
-                    onGotoPage = {this.onGotoPage}
-                    currentPage={this.state.currentPage}
-                 />
+
+                    <Pagination
+                        type={this.props.pagination.type}
+                        totalRecords={this.state.data.length}
+                        pageLength={this.state.pageLength}
+                        onPageLengthChange={this.onPageLengthChange}
+                        onGotoPage={this.onGotoPage}
+                        currentPage={this.state.currentPage}
+                    />
                 }
                 {this.renderToolbar()}
                 {this.renderTable()}
